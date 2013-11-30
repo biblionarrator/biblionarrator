@@ -1,5 +1,6 @@
 "use strict";
 var ElasticSearchClient = require('elasticsearchclient');
+var async = require('async');
 
 function ESClient(config) {
     var self = this;
@@ -16,8 +17,28 @@ function ESClient(config) {
         self.indexname = config.graphconf.titan["storage.index.search.index-name"] || 'titan';
     }
 
-    self.search = function () {
-        return client.search.apply(client, arguments);
+    self.search = function (indexname, type, query, callback) {
+        console.log(query);
+        if (query.query.query_string) {
+            config.graphstore.g.graph.indexQuerySync("search", query.query.query_string.query).vertices(function (err, recs) {
+                var it = recs.iteratorSync();
+                var list = new config.graphstore.g.ArrayList();
+                var count = 0;
+                async.whilst(function () { return (count++ < query.size && it.hasNextSync()); },
+                function (cb) {
+                    it.next(function (err, val) {
+                        val.getElement(function (err, el) {
+                            list.add(el, cb);
+                        });
+                    });
+                },
+                function (err, res) {
+                    callback(err, new config.graphstore.g.gremlin.PipelineWrapper(config.graphstore.g.gremlin, list.iteratorSync()));
+                });
+            });
+        } else {
+            return client.search.apply(client, arguments);
+        }
     };
 
     self.index = { };

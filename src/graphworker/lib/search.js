@@ -18,7 +18,8 @@ module.exports = function Search (query, callback) {
             var records = [ ];
             var list = [ ];
             var count = 0;
-            if (typeof err === 'undefined') {
+            console.log(data);
+            if (typeof err === 'undefined' && typeof data === 'string') {
                 data = JSON.parse(data);
                 if (typeof data.hits !== 'undefined' && data.hits.total > 0) {
                     count = data.hits.total;
@@ -34,15 +35,17 @@ module.exports = function Search (query, callback) {
                         }
                     });
                 }
-            }
-            if (plan.vertexquery.length > 0 || plan.pipeline.length > 0){
-                handleVQandPipeline(query, plan, list, callback);
+                if (plan.vertexquery.length > 0 || plan.pipeline.length > 0){
+                    handleVQandPipeline(query, plan, list, callback);
+                } else {
+                    callback({
+                        records: records,
+                        list: list,
+                        count: count
+                    });
+                }
             } else {
-                callback({
-                    records: records,
-                    list: list,
-                    count: count
-                });
+                handlePipeline(query, plan, data, callback);
             }
         });
     } else {
