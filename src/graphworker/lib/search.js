@@ -18,7 +18,6 @@ module.exports = function Search (query, callback) {
             var records = [ ];
             var list = [ ];
             var count = 0;
-            console.log(data);
             if (typeof err === 'undefined' && typeof data === 'string') {
                 data = JSON.parse(data);
                 if (typeof data.hits !== 'undefined' && data.hits.total > 0) {
