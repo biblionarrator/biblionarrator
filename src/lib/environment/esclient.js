@@ -19,20 +19,30 @@ function ESClient(config) {
 
     self.search = function (indexname, type, query, callback) {
         if (query.query.query_string) {
-            config.graphstore.g.graph.indexQuerySync("search", query.query.query_string.query).vertices(function (err, recs) {
-                var it = recs.iteratorSync();
-                var list = new config.graphstore.g.ArrayList();
-                var count = 0;
-                async.whilst(function () { return (count++ < query.size && it.hasNextSync()); },
-                function (cb) {
-                    it.next(function (err, val) {
-                        val.getElement(function (err, el) {
-                            list.add(el, cb);
-                        });
+            config.graphstore.g.graph.indexQuery("search", query.query.query_string.query, function (err, res) {
+                res.vertices(function (err, recs) {
+                    recs.iterator(function (err, it) {
+                        var list = new config.graphstore.g.ArrayList();
+                        var count = 0;
+                        var done = function () {
+                            callback(err, new config.graphstore.g.gremlin.PipelineWrapper(config.graphstore.g.gremlin, list.iteratorSync()));
+                        };
+                        var iterate = function (err, res) {
+                            if (count++ >= query.size || err) return done();
+                            it.hasNext(function (err, res) {
+                                if (res) {
+                                    it.next(function (err, val) {
+                                        val.getElement(function (err, el) {
+                                            list.add(el, iterate);
+                                        });
+                                    });
+                                } else {
+                                    done();
+                                }
+                            });
+                        };
+                        iterate();
                     });
-                },
-                function (err, res) {
-                    callback(err, new config.graphstore.g.gremlin.PipelineWrapper(config.graphstore.g.gremlin, list.iteratorSync()));
                 });
             });
         } else {
