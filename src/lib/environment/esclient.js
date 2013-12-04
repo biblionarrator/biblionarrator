@@ -18,7 +18,6 @@ function ESClient(config) {
     }
 
     self.search = function (indexname, type, query, callback) {
-        console.log(query);
         if (query.query.query_string) {
             config.graphstore.g.graph.indexQuerySync("search", query.query.query_string.query).vertices(function (err, recs) {
                 var it = recs.iteratorSync();
