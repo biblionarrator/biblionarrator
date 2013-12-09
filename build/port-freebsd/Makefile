@@ -24,7 +24,7 @@ OPTIONS_DEFINE= MONGO REDIS GRUNT
 MONGO_DESC=	Install MongoDB for use as a datastore
 REDIS_DESC=     Install Redis for use as a datastore
 GRUNT_DESC=	Install Grunt globally (required for building)
-CASSANDRA_DESC=	Install Cassandra in /opt (not currently supported; please install Cassandra 1.2 manually)
+CASSANDRA_DESC=	Install Cassandra 1.2 from local port
 ES_DESC=	Install ElasticSearch in /opt (not currently supported; please install ElasticSearch 0.90.5+ manually)
 
 
@@ -41,6 +41,8 @@ RUN_DEPENDS+=	redis-server:${PORTSDIR}/databases/redis
 .endif
 
 .if ${PORT_OPTIONS:MCASSANDRA}
+RUN_DEPENDS+=   ${JAVALIBDIR}/snappy-java.jar:${PORTSDIR}/archivers/snappy-java
+RUN_DEPENDS+=	nodetool:cassandra
 .endif
 
 .if ${PORT_OPTIONS:MES}

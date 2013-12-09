@@ -39,7 +39,6 @@ uploads
 tmp
 
 paths.php
-cassandra
 
 # Generated assets
 doc/api
