@@ -28,6 +28,7 @@ function prepareQuery(req) {
     } else if (typeof req.query.facet !== 'undefined') {
         querystring = querystring + ' ' + req.query.facet.join(' ');
     }
+    querystring = querystring + ' range<' + (req.query.offset || 0) + ' ' + (req.query.perpage || 20) + '>';
     return querystring;
 }
 
@@ -87,6 +88,7 @@ exports.view = function(req, res) {
                 });
             };
         }
+        console.log(query, perpage);
         searchengine.search({ query: query, offset: offset, perpage: perpage }, searchcb, facetcb);
     }, function (err) { res.send(404, err); });
 };

@@ -94,7 +94,7 @@ function optimizeTree(tree, query, supports, environment) {
             break;
         case 'text':
             if (supports.elasticsearch) {
-                query.textq.push(analyzeESValue(tree[2], environment.indexes[tree[1]].id));
+                query.textq.push('+' + analyzeESValue(tree[2], environment.indexes[tree[1]].id));
             } else if (supports.contains) {
                 analyzeContainsValue(tree[2]).forEach(function (value) {
                     query.vertexq.push([ tree[1], 'contains', value ]);
