@@ -14,6 +14,14 @@ module.exports = function Search (query, callback) {
         if (environment.esclient.boost) {
             plan.esquery.query.query_string.query = plan.esquery.query.query_string.query + ' AND ' + environment.esclient.boost;
         }
+        if (typeof query.sort !== 'undefined' && query.sort.length > 0) {
+            plan.esquery.sort = plan.esquery.sort || [ ];
+            query.sort.forEach(function (sort) {
+                var temp = { };
+                temp[environment.indexes[Object.keys(sort)[0]].id] = sort[Object.keys(sort)[0]];
+                plan.esquery.sort.push(temp);
+            });
+        }
         environment.esclient.search(environment.esclient.indexname, 'vertex', plan.esquery, function (err, data) {
             var records = [ ];
             var list = [ ];
