@@ -88,7 +88,6 @@ exports.view = function(req, res) {
                 });
             };
         }
-        console.log(query, perpage);
         searchengine.search({ query: query, offset: offset, perpage: perpage }, searchcb, facetcb);
     }, function (err) { res.send(404, err); });
 };
