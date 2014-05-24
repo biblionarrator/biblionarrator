@@ -38,15 +38,15 @@
 {{/if}}
 <div class="row-fluid">
     {{#if facet}}
-        <div class="span2">
+        <div class="span2 sidebar">
             {{>facets}}
         </div>
     {{else}}
-        <div class="span2" data-template="facets" data-message="{{facetpub}}">
+        <div class="span2 sidebar" data-template="facets" data-message="{{facetpub}}">
             {{#trhtml 'label.loadingfacets'}}Loading facets{{/trhtml}}
         </div>
     {{/if}}
-    <div class="span10">
+    <div class="span10 main-content">
     <table id="recordList" class="table">
         <thead>
             <tr class="header-hidden"><th>Number</th><th>Record</th><th>Actions</th></tr>

@@ -386,6 +386,7 @@ footer {
             width: 100%;
             position: relative;
             padding: 0;
+            margin-top: 1em;
             margin-bottom: 2em;
 
             &.open {
@@ -1553,4 +1554,44 @@ a.selected {
 
 .completely-option section {
     display: none;
+}
+
+/* Print configuration */
+@media only print {
+    @page {
+        margin-top: 0.5in !important;
+        margin-bottom: 0.5in !important;
+    }
+    .navbar {
+        display: none;
+    }
+    .recordContainer section {
+        display: block !important;
+    }
+    .preview {
+        display: none;
+    }
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        width: 95% !important;
+    }
+    #recordList .resultRow .result-content {
+        header {
+            margin-bottom: 0;
+        }
+        section {
+            background-color: white;
+        }
+    }
+    .view-record-label, .recordPane {
+        display: none;
+    }
+    #recordList.table th, #recordList.table td {
+        border-top: none;
+    }
+    a:after {
+        content: ' ' !important;
+    }
 }

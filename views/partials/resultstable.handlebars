@@ -1,12 +1,13 @@
 {{#each records}}
     <tr class="resultRow" data-id="{{id}}">
         <td class="result-number">
-            <a class="record-number-link" href="/record/{{id}}" id="result{{number}}">{{number}}<br>{{#trhtml 'action.viewrecord'}}view record{{/trhtml}}</a>
+            <a class="record-number-link" href="/record/{{id}}" id="result{{number}}">{{number}}<br><span class="view-record-label">{{#trhtml 'action.viewrecord'}}view record{{/trhtml}}</span></a>
         </td>
         <td class="result-content">
             <div itemscope id="recordContainer_{{id}}" class="recordtype_Book recordContainer">
                 {{{rendered}}}
             </div>
+            {{#if media.length}}
             <div class="image-gallery">
                 <ul class="image-gallery-thumbnails thumbnails">
                     {{#each media}}
@@ -14,6 +15,7 @@
                     {{/each}}
                 </ul>
             </div>
+            {{/if}}
             <button title="{{#tr 'action.showwholerecord'}}Show whole record{{/tr}}" class="preview tray btn btn-link">
                 <i class="chevrons-left"></i>
                 <div><i class="tray-bar"><span class="expand-label">{{#trhtml 'label.moreellipsis'}}More...{{/trhtml}}</span><span class="collapse-label">{{#trhtml 'label.lessellipsis'}}Less...{{/trhtml}}</span></i></div>
